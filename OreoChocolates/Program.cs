@@ -22,38 +22,36 @@ namespace OreoChocolates
             string codesFilePath = Path.GetFullPath(@"..\..\") + @"\Documents\tags.txt";
             var codeList = sgtin96Decoder.GetCodeList(codesFilePath);
 
-            //Test convert hex to binary string
-            //string binaryString = sgtin96Decoder.HexStringToBinary(codeList[0]);
-            string binaryString = sgtin96Decoder.HexStringToBinary("3074257BF7194E4000001A85");
-
-            //test code is valid
-            bool codeIsValid = sgtin96Decoder.IsCodeValid(testTag);
-            Console.WriteLine(codeIsValid);
-
 
 
             //string companyCode = sgtin96Decoder.CompanyCode(testTag);
             //find invalid codes
+            int milkaOreo = 0;
+            int invalids = 0;
             foreach (var code in codeList)
             {
                
                 if (sgtin96Decoder.IsCodeValid(code))
                 {
                     string companyCode = sgtin96Decoder.CompanyCode(code);
-                    Console.WriteLine(companyCode);
-                    if (companyCode == targetCompany)
+                    string itemCode = sgtin96Decoder.ItemCode(code);
+                    
+                    if (companyCode == targetCompany && itemCode == targetItem)
                     {
                         Console.WriteLine("Milka!!");
+                        milkaOreo++;
                     }
                 }
                 else
                 {
+                    invalids++;
                     Console.WriteLine("Invalid: {0}", code);
                 }
             }
 
-            
 
+            Console.WriteLine("Milkas: {0}",milkaOreo);
+            Console.WriteLine("Invalid: {0}", invalids);
             Console.WriteLine("Over!");
             Console.ReadLine();
         }

@@ -91,6 +91,15 @@ namespace SGTIN96
 
 
         }
+        public string ItemCode(string hex)
+        {
+            Partition partition = PartitionData(hex);
+            string binary = HexStringToBinary(hex);
+            string itemData = binary.Substring(14+partition.companyBitsCount, partition.itemBitsCount);
+            return Convert.ToInt64(itemData, 2).ToString().PadLeft(partition.itemDigits, '0');
+        }
+
+        
 
     }
 
