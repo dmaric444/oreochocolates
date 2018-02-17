@@ -46,19 +46,19 @@ namespace SGTIN96
             get { return _companyCode; }
         }
 
-        private string _serialNumber;
-
-        public string SerialNumber
-        {
-            get { return _serialNumber; }
-            
-        }
-
         private string _itemCode;
 
         public string ItemCode
         {
             get { return _itemCode; }
+        }
+
+        private string _serialNumber;
+
+        public string SerialNumber
+        {
+            get { return _serialNumber; }
+
         }
 
         public SGTIN96Decoder(string hex)

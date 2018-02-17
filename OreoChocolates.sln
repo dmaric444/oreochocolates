@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OreoChocolates", "OreoChoco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGTIN96", "SGTIN96\SGTIN96\SGTIN96.csproj", "{3C41C89C-D5EA-4FF7-9D89-9376671E8255}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi\WebApi.csproj", "{A368A799-C837-431E-8675-63BF3AE333D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3C41C89C-D5EA-4FF7-9D89-9376671E8255}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C41C89C-D5EA-4FF7-9D89-9376671E8255}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C41C89C-D5EA-4FF7-9D89-9376671E8255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A368A799-C837-431E-8675-63BF3AE333D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A368A799-C837-431E-8675-63BF3AE333D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A368A799-C837-431E-8675-63BF3AE333D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A368A799-C837-431E-8675-63BF3AE333D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
