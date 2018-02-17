@@ -53,5 +53,11 @@
   <ItemGroup>
     <Content Include="Documents\tags.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SGTIN96\SGTIN96\SGTIN96.csproj">
+      <Project>{3c41c89c-d5ea-4ff7-9d89-9376671e8255}</Project>
+      <Name>SGTIN96</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
