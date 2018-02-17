@@ -23,8 +23,8 @@ namespace OreoChocolates
             var codeList = sgtin96Decoder.GetCodeList(codesFilePath);
 
 
+            
 
-            //string companyCode = sgtin96Decoder.CompanyCode(testTag);
             //find invalid codes
             int milkaOreo = 0;
             int invalids = 0;
@@ -35,10 +35,11 @@ namespace OreoChocolates
                 {
                     string companyCode = sgtin96Decoder.CompanyCode(code);
                     string itemCode = sgtin96Decoder.ItemCode(code);
-                    
+                    string serialNumber = sgtin96Decoder.SerialNumber(code);
+
                     if (companyCode == targetCompany && itemCode == targetItem)
                     {
-                        Console.WriteLine("Milka!!");
+                        Console.WriteLine(serialNumber);
                         milkaOreo++;
                     }
                 }
@@ -50,7 +51,7 @@ namespace OreoChocolates
             }
 
 
-            Console.WriteLine("Milkas: {0}",milkaOreo);
+            Console.WriteLine("Milka Oreo: {0}", milkaOreo);
             Console.WriteLine("Invalid: {0}", invalids);
             Console.WriteLine("Over!");
             Console.ReadLine();

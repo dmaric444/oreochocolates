@@ -15,6 +15,8 @@ namespace SGTIN96
         private const string HEX_HEADER_VALUE = "30";
         private const int PARTITION_START_POSITION = 11;
         private const int COMPANY_START_POSITION = 14;
+        private const int SERIAL_NUMBER_START_POSITION = 58;
+        private const int SERIAL_NUMBER_LENGTH= 38;
 
         private List<Partition> _partitions = new List<Partition>(){
               new Partition(){ value = 0 , companyBitsCount = 40, companyDigits = 12, itemBitsCount = 4, itemDigits = 1},
@@ -25,6 +27,9 @@ namespace SGTIN96
               new Partition(){ value = 5 , companyBitsCount = 24, companyDigits = 7,  itemBitsCount = 20, itemDigits = 6},
               new Partition(){ value = 6 , companyBitsCount = 20, companyDigits = 6,  itemBitsCount = 24, itemDigits = 7}
         };
+
+        
+
         public string[] GetCodeList(string filePath)
         {
             string[] codes = File.ReadAllLines(filePath);
@@ -102,7 +107,13 @@ namespace SGTIN96
             string itemData = binary.Substring(COMPANY_START_POSITION + partition.companyBitsCount, partition.itemBitsCount);
             return Convert.ToInt64(itemData, 2).ToString().PadLeft(partition.itemDigits, '0');
         }
-
+        public string SerialNumber(string hex)
+        {
+            Partition partition = PartitionData(hex);
+            string binary = HexStringToBinary(hex);
+            string serialNumberData = binary.Substring(SERIAL_NUMBER_START_POSITION, SERIAL_NUMBER_LENGTH);
+            return Convert.ToInt64(serialNumberData, 2).ToString();
+        }
 
 
     }
