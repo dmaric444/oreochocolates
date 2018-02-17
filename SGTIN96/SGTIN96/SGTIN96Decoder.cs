@@ -65,9 +65,14 @@ namespace SGTIN96
         {
             _hex = hex;
             _codeIsValid = IsCodeValid(hex);
+            _binary = HexStringToBinary();
+
+            if (!LengthIsValid(_binary))
+                _codeIsValid = false;
+
             if (_codeIsValid)
             {
-                _binary = HexStringToBinary();
+                
                 _partition = GetPartitionData();
                 _companyCode = GetCompanyCode();
                 _serialNumber = GetSerialNumber();
@@ -109,6 +114,14 @@ namespace SGTIN96
         public bool StringIsHex(string hex)
         {
             return Regex.IsMatch(hex, @"\A\b[0-9a-fA-F]+\b\Z");
+        }
+        public bool LengthIsValid(string binaryString)
+        {
+            if (binaryString.Length == BINARY_STRING_LENGTH)
+                return true;
+            else
+                return false;
+
         }
 
         public Partition GetPartitionData()
