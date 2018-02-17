@@ -28,18 +28,59 @@ namespace SGTIN96
               new Partition(){ value = 6 , companyBitsCount = 20, companyDigits = 6,  itemBitsCount = 24, itemDigits = 7}
         };
 
-        
+        private string _hex;
+        private string _binary;
+        private Partition _partition;
 
-        public string[] GetCodeList(string filePath)
+        private bool _codeIsValid;
+
+        public bool CodeIsValid
         {
-            string[] codes = File.ReadAllLines(filePath);
-            return codes;
+            get { return _codeIsValid; }
         }
 
-        public string HexStringToBinary(string hex)
+        private string _companyCode;
+
+        public string CompanyCode
+        {
+            get { return _companyCode; }
+        }
+
+        private string _serialNumber;
+
+        public string SerialNumber
+        {
+            get { return _serialNumber; }
+            
+        }
+
+        private string _itemCode;
+
+        public string ItemCode
+        {
+            get { return _itemCode; }
+        }
+
+        public SGTIN96Decoder(string hex)
+        {
+            _hex = hex;
+            _codeIsValid = IsCodeValid(hex);
+            if (_codeIsValid)
+            {
+                _binary = HexStringToBinary();
+                _partition = GetPartitionData();
+                _companyCode = GetCompanyCode();
+                _serialNumber = GetSerialNumber();
+                _itemCode = GetItemCode();
+            }
+        }
+
+     
+
+        public string HexStringToBinary()
         {
             string binarystring = String.Join(String.Empty,
-               hex.Select(
+               _hex.Select(
                  c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')
                )
              );
@@ -54,10 +95,6 @@ namespace SGTIN96
             if (!IsHeaderSGTIN96(hex))
                 return false;
 
-            string binary = HexStringToBinary(hex);
-            if (!LengthIsValid(binary))
-                return false;
-
             return true;
         }
 
@@ -69,49 +106,30 @@ namespace SGTIN96
                 return false;
         }
 
-        public bool LengthIsValid(string binaryString)
-        {
-            if (binaryString.Length == BINARY_STRING_LENGTH)
-                return true;
-            else
-                return false;
-
-        }
-
         public bool StringIsHex(string hex)
         {
             return Regex.IsMatch(hex, @"\A\b[0-9a-fA-F]+\b\Z");
-
         }
 
-        public Partition PartitionData(string hex)
+        public Partition GetPartitionData()
         {
-            string binary = HexStringToBinary(hex);
-            int partitionValue = Convert.ToInt32(binary.Substring(PARTITION_START_POSITION, 3), 2);
+            int partitionValue = Convert.ToInt32(_binary.Substring(PARTITION_START_POSITION, 3), 2);
             return _partitions.Where(p => p.value == partitionValue).FirstOrDefault();
-
         }
 
-        public string CompanyCode(string hex)
+        public string GetCompanyCode()
         {
-            Partition partition = PartitionData(hex);
-            string binary = HexStringToBinary(hex);
-            string companyData = binary.Substring(COMPANY_START_POSITION, partition.companyBitsCount);
-            return Convert.ToInt64(companyData, 2).ToString().PadLeft(partition.companyDigits, '0');
-
+            string companyData = _binary.Substring(COMPANY_START_POSITION, _partition.companyBitsCount);
+            return Convert.ToInt64(companyData, 2).ToString().PadLeft(_partition.companyDigits, '0');
         }
-        public string ItemCode(string hex)
+        public string GetItemCode()
         {
-            Partition partition = PartitionData(hex);
-            string binary = HexStringToBinary(hex);
-            string itemData = binary.Substring(COMPANY_START_POSITION + partition.companyBitsCount, partition.itemBitsCount);
-            return Convert.ToInt64(itemData, 2).ToString().PadLeft(partition.itemDigits, '0');
+            string itemData = _binary.Substring(COMPANY_START_POSITION + _partition.companyBitsCount, _partition.itemBitsCount);
+            return Convert.ToInt64(itemData, 2).ToString().PadLeft(_partition.itemDigits, '0');
         }
-        public string SerialNumber(string hex)
+        public string GetSerialNumber()
         {
-            Partition partition = PartitionData(hex);
-            string binary = HexStringToBinary(hex);
-            string serialNumberData = binary.Substring(SERIAL_NUMBER_START_POSITION, SERIAL_NUMBER_LENGTH);
+            string serialNumberData = _binary.Substring(SERIAL_NUMBER_START_POSITION, SERIAL_NUMBER_LENGTH);
             return Convert.ToInt64(serialNumberData, 2).ToString();
         }
 

@@ -12,49 +12,51 @@ namespace OreoChocolates
     {
         static void Main(string[] args)
         {
-            SGTIN96Decoder sgtin96Decoder = new SGTIN96Decoder();
-
-            string testTag = "3074257BF7194E4000001A85";
-            string targetCompany = "069124";
-            string targetItem = "1253252";
-
-            //Read file with codes
+            string targetCompany = "069124"; //Milka
+            string targetItem = "1253252";   //Oreo
             string codesFilePath = Path.GetFullPath(@"..\..\") + @"\Documents\tags.txt";
-            var codeList = sgtin96Decoder.GetCodeList(codesFilePath);
 
+            ListItems(codesFilePath, targetCompany, targetItem);
 
-            
+            Console.WriteLine("Over!");
+            Console.ReadLine();
+        }
 
-            //find invalid codes
-            int milkaOreo = 0;
-            int invalids = 0;
+        private static void ListItems(string codesFilePath, string targetCompany, string targetItem)
+        {
+
+            List<string> validSN = new List<string>();
+            List<string> invalidHex = new List<string>();
+            string[] codeList = File.ReadAllLines(codesFilePath);
+
             foreach (var code in codeList)
             {
-               
-                if (sgtin96Decoder.IsCodeValid(code))
+                SGTIN96Decoder sgtin96Decoder = new SGTIN96Decoder(code);
+                if (sgtin96Decoder.CodeIsValid)
                 {
-                    string companyCode = sgtin96Decoder.CompanyCode(code);
-                    string itemCode = sgtin96Decoder.ItemCode(code);
-                    string serialNumber = sgtin96Decoder.SerialNumber(code);
-
-                    if (companyCode == targetCompany && itemCode == targetItem)
-                    {
-                        Console.WriteLine(serialNumber);
-                        milkaOreo++;
-                    }
+                    if (sgtin96Decoder.CompanyCode == targetCompany && sgtin96Decoder.ItemCode == targetItem)
+                        validSN.Add(sgtin96Decoder.SerialNumber);
                 }
                 else
                 {
-                    invalids++;
-                    Console.WriteLine("Invalid: {0}", code);
+                    invalidHex.Add(code);
                 }
             }
 
+            PrintList("Invalid tags:", invalidHex);
+            PrintList("Founded serials:", validSN);
 
-            Console.WriteLine("Milka Oreo: {0}", milkaOreo);
-            Console.WriteLine("Invalid: {0}", invalids);
-            Console.WriteLine("Over!");
-            Console.ReadLine();
+        }
+
+        private static void PrintList(string title, List<string> list)
+        {
+            Console.WriteLine(title);
+            foreach (var item in list)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("Total: {0}", list.Count);
+            Console.WriteLine("");
         }
     }
 }
