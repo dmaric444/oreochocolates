@@ -11,6 +11,11 @@ namespace SGTIN96
 
     public class SGTIN96Decoder
     {
+        private const int BINARY_STRING_LENGTH = 96;
+        private const string HEX_HEADER_VALUE = "30";
+        private const int PARTITION_START_POSITION = 11;
+        private const int COMPANY_START_POSITION = 14;
+
         private List<Partition> _partitions = new List<Partition>(){
               new Partition(){ value = 0 , companyBitsCount = 40, companyDigits = 12, itemBitsCount = 4, itemDigits = 1},
               new Partition(){ value = 1 , companyBitsCount = 37, companyDigits = 11,  itemBitsCount = 7, itemDigits = 2},
@@ -53,7 +58,7 @@ namespace SGTIN96
 
         public bool IsHeaderSGTIN96(string hex)
         {
-            if (hex.Substring(0, 2) == "30")
+            if (hex.Substring(0, 2) == HEX_HEADER_VALUE)
                 return true;
             else
                 return false;
@@ -61,7 +66,7 @@ namespace SGTIN96
 
         public bool LengthIsValid(string binaryString)
         {
-            if (binaryString.Length == 96)
+            if (binaryString.Length == BINARY_STRING_LENGTH)
                 return true;
             else
                 return false;
@@ -77,7 +82,7 @@ namespace SGTIN96
         public Partition PartitionData(string hex)
         {
             string binary = HexStringToBinary(hex);
-            int partitionValue = Convert.ToInt32(binary.Substring(11, 3), 2);
+            int partitionValue = Convert.ToInt32(binary.Substring(PARTITION_START_POSITION, 3), 2);
             return _partitions.Where(p => p.value == partitionValue).FirstOrDefault();
 
         }
@@ -86,20 +91,19 @@ namespace SGTIN96
         {
             Partition partition = PartitionData(hex);
             string binary = HexStringToBinary(hex);
-            string companyData = binary.Substring(14, partition.companyBitsCount);
+            string companyData = binary.Substring(COMPANY_START_POSITION, partition.companyBitsCount);
             return Convert.ToInt64(companyData, 2).ToString().PadLeft(partition.companyDigits, '0');
-
 
         }
         public string ItemCode(string hex)
         {
             Partition partition = PartitionData(hex);
             string binary = HexStringToBinary(hex);
-            string itemData = binary.Substring(14+partition.companyBitsCount, partition.itemBitsCount);
+            string itemData = binary.Substring(COMPANY_START_POSITION + partition.companyBitsCount, partition.itemBitsCount);
             return Convert.ToInt64(itemData, 2).ToString().PadLeft(partition.itemDigits, '0');
         }
 
-        
+
 
     }
 
