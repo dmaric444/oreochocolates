@@ -8,8 +8,9 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
-    public class ValuesController : ApiController
+    public class TagsController : ApiController
     {
+        [Route("decodetag")]
         public SGTIN96Decoder Get(string hex)
         {
             SGTIN96Decoder sgtin96Decoder = new SGTIN96Decoder(hex);

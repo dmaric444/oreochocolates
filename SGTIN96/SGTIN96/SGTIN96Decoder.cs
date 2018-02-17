@@ -65,14 +65,18 @@ namespace SGTIN96
         {
             _hex = hex;
             _codeIsValid = IsCodeValid(hex);
-            _binary = HexStringToBinary();
-
-            if (!LengthIsValid(_binary))
-                _codeIsValid = false;
+            
 
             if (_codeIsValid)
             {
-                
+                _binary = HexStringToBinary();
+
+                if (!LengthIsValid(_binary))
+                {
+                    _codeIsValid = false;
+                    return;
+                }
+
                 _partition = GetPartitionData();
                 _companyCode = GetCompanyCode();
                 _serialNumber = GetSerialNumber();
