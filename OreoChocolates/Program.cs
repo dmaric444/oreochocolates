@@ -15,6 +15,8 @@ namespace OreoChocolates
             SGTIN96Decoder sgtin96Decoder = new SGTIN96Decoder();
 
             string testTag = "3074257BF7194E4000001A85";
+            string targetCompany = "069124";
+            string targetItem = "1253252";
 
             //Read file with codes
             string codesFilePath = Path.GetFullPath(@"..\..\") + @"\Documents\tags.txt";
@@ -28,13 +30,21 @@ namespace OreoChocolates
             bool codeIsValid = sgtin96Decoder.IsCodeValid(testTag);
             Console.WriteLine(codeIsValid);
 
+
+
+            //string companyCode = sgtin96Decoder.CompanyCode(testTag);
             //find invalid codes
             foreach (var code in codeList)
             {
                
                 if (sgtin96Decoder.IsCodeValid(code))
                 {
-                    Console.WriteLine("Valid: {0}", code);
+                    string companyCode = sgtin96Decoder.CompanyCode(code);
+                    Console.WriteLine(companyCode);
+                    if (companyCode == targetCompany)
+                    {
+                        Console.WriteLine("Milka!!");
+                    }
                 }
                 else
                 {
@@ -42,6 +52,7 @@ namespace OreoChocolates
                 }
             }
 
+            
 
             Console.WriteLine("Over!");
             Console.ReadLine();
