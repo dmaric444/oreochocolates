@@ -14,6 +14,7 @@ namespace SGTIN96
         private const int BINARY_STRING_LENGTH = 96;
         private const string HEX_HEADER_VALUE = "30";
         private const int PARTITION_START_POSITION = 11;
+        private const int PARTITION_LENGTH = 3;
         private const int COMPANY_START_POSITION = 14;
         private const int SERIAL_NUMBER_START_POSITION = 58;
         private const int SERIAL_NUMBER_LENGTH= 38;
@@ -130,7 +131,7 @@ namespace SGTIN96
 
         public Partition GetPartitionData()
         {
-            int partitionValue = Convert.ToInt32(_binary.Substring(PARTITION_START_POSITION, 3), 2);
+            int partitionValue = Convert.ToInt32(_binary.Substring(PARTITION_START_POSITION, PARTITION_LENGTH), 2);
             return _partitions.Where(p => p.value == partitionValue).FirstOrDefault();
         }
 
