@@ -11,10 +11,13 @@ namespace WebApi.Controllers
     public class TagsController : ApiController
     {
         [Route("decodetag")]
-        public SGTIN96Decoder Get(string hex)
+        public HttpResponseMessage Get(string hex)
         {
             SGTIN96Decoder sgtin96Decoder = new SGTIN96Decoder(hex);
-            return sgtin96Decoder;
+            if (sgtin96Decoder.CodeIsValid)
+                return Request.CreateResponse<SGTIN96Decoder>(HttpStatusCode.OK, sgtin96Decoder);
+            else
+                return Request.CreateResponse<object>(HttpStatusCode.BadRequest, new { message = "Tag is not valid" });
         }
 
     }
