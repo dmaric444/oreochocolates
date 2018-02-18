@@ -87,7 +87,7 @@ namespace SGTIN96
 
      
 
-        public string HexStringToBinary()
+        private string HexStringToBinary()
         {
             string binarystring = String.Join(String.Empty,
                _hex.Select(
@@ -97,7 +97,7 @@ namespace SGTIN96
             return binarystring;
         }
 
-        public bool IsCodeValid(string hex)
+        private bool IsCodeValid(string hex)
         {
             if (!StringIsHex(hex))
                 return false;
@@ -108,7 +108,7 @@ namespace SGTIN96
             return true;
         }
 
-        public bool IsHeaderSGTIN96(string hex)
+        private bool IsHeaderSGTIN96(string hex)
         {
             if (hex.Substring(0, 2) == HEX_HEADER_VALUE)
                 return true;
@@ -116,11 +116,11 @@ namespace SGTIN96
                 return false;
         }
 
-        public bool StringIsHex(string hex)
+        private bool StringIsHex(string hex)
         {
             return Regex.IsMatch(hex, @"\A\b[0-9a-fA-F]+\b\Z");
         }
-        public bool LengthIsValid(string binaryString)
+        private bool LengthIsValid(string binaryString)
         {
             if (binaryString.Length == BINARY_STRING_LENGTH)
                 return true;
@@ -129,23 +129,23 @@ namespace SGTIN96
 
         }
 
-        public Partition GetPartitionData()
+        private Partition GetPartitionData()
         {
             int partitionValue = Convert.ToInt32(_binary.Substring(PARTITION_START_POSITION, PARTITION_LENGTH), 2);
             return _partitions.Where(p => p.value == partitionValue).FirstOrDefault();
         }
 
-        public string GetCompanyCode()
+        private string GetCompanyCode()
         {
             string companyData = _binary.Substring(COMPANY_START_POSITION, _partition.companyBitsCount);
             return Convert.ToInt64(companyData, 2).ToString().PadLeft(_partition.companyDigits, '0');
         }
-        public string GetItemCode()
+        private string GetItemCode()
         {
             string itemData = _binary.Substring(COMPANY_START_POSITION + _partition.companyBitsCount, _partition.itemBitsCount);
             return Convert.ToInt64(itemData, 2).ToString().PadLeft(_partition.itemDigits, '0');
         }
-        public string GetSerialNumber()
+        private string GetSerialNumber()
         {
             string serialNumberData = _binary.Substring(SERIAL_NUMBER_START_POSITION, SERIAL_NUMBER_LENGTH);
             return Convert.ToInt64(serialNumberData, 2).ToString();
